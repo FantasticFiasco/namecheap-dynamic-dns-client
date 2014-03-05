@@ -1,25 +1,20 @@
-﻿namespace DynDnsClient.Console
+﻿using System.Reflection;
+using log4net;
+
+namespace DynDnsClient.Console
 {
     class Program
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         static void Main(string[] args)
         {
-            Print("Updating Namecheap host records...");
+            Log.Info("Updating Namecheap host records...");
             
             var client = new Client();
             client.RunOnce();
 
-            Print("Press any key to continue...");
-            ReadKey();
-        }
-
-        private static void Print(string message)
-        {
-            System.Console.WriteLine(message);
-        }
-
-        private static void ReadKey()
-        {
+            Log.Info("Press any key to continue...");
             System.Console.ReadKey();
         }
     }
