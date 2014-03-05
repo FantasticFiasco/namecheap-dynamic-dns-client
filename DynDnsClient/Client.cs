@@ -26,17 +26,30 @@ namespace DynDnsClient
         {
             Log.Info("Running client continuously");
 
-            timer = new Timer(OnTick, null, TimeSpan.Zero, Settings.Default.Period);
+            timer = new Timer(Update, null, TimeSpan.Zero, Settings.Default.Period);
+        }
+
+        public void RunOnce()
+        {
+            Log.Info("Running client once");
+
+            // Force update, this will not be saved since Stop isn't called when only running it
+            // once
+            Settings.Default.LastKnownExternalIpAddress = null;
+
+            Update(null);
         }
 
         public void Stop()
         {
             Log.Info("Stopping client");
-
+            
             timer.Dispose();
+
+            Settings.Default.Save();
         }
 
-        private void OnTick(object state)
+        private void Update(object state)
         {
             // Get external IP
             string ipAddress = externalIpAddress.Get();
@@ -62,8 +75,7 @@ namespace DynDnsClient
             DnsUpdateResult result = namecheapClient.Update(
                 Settings.Default.Domain,
                 Settings.Default.Hosts.Cast<string>(),
-                Settings.Default.Password,
-                ipAddress);
+                Settings.Default.Password);
 
             if (result.IsSuccess)
             {

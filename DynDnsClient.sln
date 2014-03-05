@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0F021F
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynDnsClient.Console", "DynDnsClient.Console\DynDnsClient.Console.csproj", "{157B7D77-8B4E-4F14-A876-AE314B73CEBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{1AA9E8EE-8D9E-4411-9933-B1C100744D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AA9E8EE-8D9E-4411-9933-B1C100744D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AA9E8EE-8D9E-4411-9933-B1C100744D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{157B7D77-8B4E-4F14-A876-AE314B73CEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157B7D77-8B4E-4F14-A876-AE314B73CEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157B7D77-8B4E-4F14-A876-AE314B73CEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157B7D77-8B4E-4F14-A876-AE314B73CEBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

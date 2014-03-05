@@ -9,15 +9,15 @@ namespace DynDnsClient
     internal class NamecheapClient
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly string Url = "https://dynamicdns.park-your-domain.com/update?host={0}&domain={1}&password={2}&ip={3}";
+        private static readonly string Url = "https://dynamicdns.park-your-domain.com/update?host={0}&domain={1}&password={2}";
 
-        public DnsUpdateResult Update(string domain, IEnumerable<string> hosts, string password, string ipAddress)
+        public DnsUpdateResult Update(string domain, IEnumerable<string> hosts, string password)
         {
             var result = new DnsUpdateResult();
 
             foreach (string host in hosts)
             {
-                string url = CreateUrl(domain, host, password, ipAddress);
+                string url = CreateUrl(domain, host, password);
                 bool success = Request(url);
 
                 result.Add(host, success);
@@ -43,9 +43,9 @@ namespace DynDnsClient
             }
         }
 
-        private static string CreateUrl(string domain, string host, string password, string ipAddress)
+        private static string CreateUrl(string domain, string host, string password)
         {
-            return string.Format(Url, host, domain, password, ipAddress);
+            return string.Format(Url, host, domain, password);
         }
     }
 }

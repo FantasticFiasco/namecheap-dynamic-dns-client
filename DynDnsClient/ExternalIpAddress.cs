@@ -33,7 +33,8 @@ namespace DynDnsClient
                     string.Empty)
                 .Replace(
                     "</body></html>",
-                    string.Empty);
+                    string.Empty)
+                .Trim();
         }
     }
 }

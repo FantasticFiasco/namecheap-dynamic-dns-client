@@ -46,7 +46,7 @@ namespace DynDnsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("fantasticfiasco.com")]
         public string Domain {
             get {
                 return ((string)(this["Domain"]));
@@ -55,6 +55,10 @@ namespace DynDnsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>@</string>\r\n  <string>www</string>\r\n  <string>www.myphotos</string>\r\n</Arr" +
+            "ayOfString>")]
         public global::System.Collections.Specialized.StringCollection Hosts {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["Hosts"]));
@@ -63,7 +67,7 @@ namespace DynDnsClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("200a22ca817b48d9bca79b798b06a285")]
         public string Password {
             get {
                 return ((string)(this["Password"]));
