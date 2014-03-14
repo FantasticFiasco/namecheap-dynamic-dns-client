@@ -14,6 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0F021F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynDnsClient.Console", "DynDnsClient.Console\DynDnsClient.Console.csproj", "{157B7D77-8B4E-4F14-A876-AE314B73CEBC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A7AE9E15-F811-486A-8619-2340E17F1D9C}"
+	ProjectSection(SolutionItems) = preProject
+		BuildSetup.bat = BuildSetup.bat
+		DynDnsClient.proj = DynDnsClient.proj
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

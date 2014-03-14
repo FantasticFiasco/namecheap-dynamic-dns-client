@@ -1,0 +1,27 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+    <ItemGroup>
+        <Solution Include="DynDnsClient.sln" />
+        <DestinationFolder Include="Setup" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <!-- DynDnsClient -->
+        <File Include="DynDnsClient\bin\Release\DynDnsClient.dll" />
+        <File Include="DynDnsClient\bin\Release\DynDnsClient.dll.config" />
+        <!-- DynDnsClient.Console -->
+        <File Include="DynDnsClient.Console\bin\Release\DynDnsClient.Console.exe" />
+        <File Include="DynDnsClient.Console\bin\Release\DynDnsClient.Console.exe.config" />
+        <!-- DynDnsClient.Service -->
+        <File Include="DynDnsClient.Service\bin\Release\DynDnsClient.Service.exe" />
+        <File Include="DynDnsClient.Service\bin\Release\DynDnsClient.Service.exe.config" />
+        <!-- Thirdparty -->
+        <File Include="DynDnsClient\bin\Release\log4net.dll" />
+    </ItemGroup>
+    
+    <Target Name="BuildSetup">
+        <MSBuild Projects="@(Solution)" Targets="Clean;Rebuild" Properties="Configuration=Release;Platform=Any CPU" />
+        <Copy SourceFiles="@(File)" DestinationFolder="@(DestinationFolder)" />
+    </Target>
+
+</Project>
