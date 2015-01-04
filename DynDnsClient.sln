@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynDnsClient", "DynDnsClient\DynDnsClient.csproj", "{8FE0846D-6170-4C00-A894-DAEE4393D956}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynDnsClient.Service", "DynDnsClient.Service\DynDnsClient.Service.csproj", "{1AA9E8EE-8D9E-4411-9933-B1C100744D69}"
@@ -18,6 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A7AE9E15
 	ProjectSection(SolutionItems) = preProject
 		BuildSetup.bat = BuildSetup.bat
 		DynDnsClient.proj = DynDnsClient.proj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2006BAB6-8A74-400D-88FB-2F5FF1F5CAD6}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Global
