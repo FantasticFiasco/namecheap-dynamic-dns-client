@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using DynDnsClient.Properties;
@@ -12,11 +9,10 @@ namespace DynDnsClient
     public class Client
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly string HostsFileName = "Hosts.txt";
-
+        
         private readonly ExternalIpAddress externalIpAddress;
         private readonly NamecheapClient namecheapClient;
-        private readonly List<string> hosts;
+        private readonly Hosts hosts;
 
         private Timer timer;
 
@@ -24,7 +20,7 @@ namespace DynDnsClient
         {
             externalIpAddress = new ExternalIpAddress();
             namecheapClient = new NamecheapClient();
-            hosts = LoadHosts();
+            hosts = new Hosts();
         }
 
         public void RunContinuously()
@@ -79,7 +75,7 @@ namespace DynDnsClient
             // Update Namecheap records
             DnsUpdateResult result = namecheapClient.Update(
                 Settings.Default.Domain,
-                hosts,
+                hosts.Get(),
                 Settings.Default.Password);
 
             if (result.IsSuccess)
@@ -91,27 +87,6 @@ namespace DynDnsClient
             {
                 Log.Error("Unable to update Namecheap records" + Environment.NewLine + result);
             }
-        }
-
-        private static List<string> LoadHosts()
-        {
-            string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string hostsFilePath = Path.Combine(directory, HostsFileName);
-
-            if (!File.Exists(hostsFilePath))
-            {
-                Log.WarnFormat("No hosts file found at '{0}'", hostsFilePath);
-                return new List<string>();
-            }
-
-            List<string> hosts = File.ReadAllLines(hostsFilePath)
-                .Where(host => !string.IsNullOrWhiteSpace(host))
-                .Select(host => host.Trim())
-                .ToList();
-            
-            Log.InfoFormat("Hosts: {0}", string.Join(", ", hosts));
-
-            return hosts;
         }
     }
 }
