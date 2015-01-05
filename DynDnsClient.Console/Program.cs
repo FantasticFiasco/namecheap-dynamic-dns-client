@@ -10,9 +10,11 @@ namespace DynDnsClient.Console
         static void Main(string[] args)
         {
             Log.Info("Updating Namecheap host records...");
-            
-            var client = new Client();
-            client.RunOnce();
+
+            using (var client = new Client())
+            {
+                client.RunOnce();    
+            }
 
             Log.Info("Press any key to continue...");
             System.Console.ReadKey();

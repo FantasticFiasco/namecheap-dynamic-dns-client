@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using DynDnsClient.Properties;
@@ -6,7 +8,7 @@ using log4net;
 
 namespace DynDnsClient
 {
-    public class Client
+    public class Client : IDisposable
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
@@ -20,37 +22,43 @@ namespace DynDnsClient
         {
             externalIpAddress = new ExternalIpAddress();
             namecheapClient = new NamecheapClient();
+            
             hosts = new Hosts();
+            hosts.Changed += OnHostsChangeUpdate;
         }
 
         public void RunContinuously()
         {
             Log.Info("Running client continuously");
             
-            timer = new Timer(Update, null, TimeSpan.Zero, Settings.Default.Period);
+            timer = new Timer(OnPeriodicUpdate, null, TimeSpan.Zero, Settings.Default.Period);
         }
 
         public void RunOnce()
         {
             Log.Info("Running client once");
 
-            // Force update, this will not be saved since Stop isn't called when only running it
-            // once
+            // Force update by specifying that last known IP address is unknown
+            string lastKnownExternalIpAddress = Settings.Default.LastKnownExternalIpAddress;
             Settings.Default.LastKnownExternalIpAddress = null;
 
-            Update(null);
+            OnPeriodicUpdate(null);
+
+            // Restore last known IP address
+            Settings.Default.LastKnownExternalIpAddress = lastKnownExternalIpAddress;
         }
 
-        public void Stop()
+        private void OnHostsChangeUpdate(object sender, EventArgs e)
         {
-            Log.Info("Stopping client");
+            string[] addedHosts = hosts.AddedSinceLastRead();
             
-            timer.Dispose();
-
-            Settings.Default.Save();
+            if (addedHosts.Any())
+            {
+                Update(addedHosts);
+            }
         }
 
-        private void Update(object state)
+        private void OnPeriodicUpdate(object state)
         {
             // Get external IP
             string ipAddress = externalIpAddress.Get();
@@ -68,25 +76,59 @@ namespace DynDnsClient
             }
 
             Log.InfoFormat(
-                "External IP has changed from {0} to {1}, lets update Namecheap records",
+                "External IP has changed from {0} to {1}, proceed with updating Namecheap records",
                 Settings.Default.LastKnownExternalIpAddress,
                 ipAddress);
 
+            if (Update(hosts.Read()))
+            {
+                Settings.Default.LastKnownExternalIpAddress = ipAddress;
+            }
+        }
+
+        private bool Update(IEnumerable<string> hosts)
+        {
             // Update Namecheap records
             DnsUpdateResult result = namecheapClient.Update(
                 Settings.Default.Domain,
-                hosts.Get(),
+                hosts,
                 Settings.Default.Password);
 
             if (result.IsSuccess)
             {
                 Log.Info("Successfully updated Namecheap records." + Environment.NewLine + result);
-                Settings.Default.LastKnownExternalIpAddress = ipAddress;
             }
             else
             {
                 Log.Error("Unable to update Namecheap records" + Environment.NewLine + result);
             }
+
+            return result.IsSuccess;
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (hosts != null)
+                {
+                    hosts.Dispose();
+                }
+
+                if (timer != null)
+                {
+                    timer.Dispose();
+                }
+            }
+        }
+
+        #endregion
     }
 }

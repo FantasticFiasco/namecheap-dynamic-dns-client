@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.ServiceProcess;
+using DynDnsClient.Properties;
 using log4net;
 
 namespace DynDnsClient.Service
@@ -8,19 +9,18 @@ namespace DynDnsClient.Service
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly Client client;
+        private Client client;
 
         public Service()
         {
             InitializeComponent();
-
-            client = new Client();
         }
 
         protected override void OnStart(string[] args)
         {
             Log.Info("Starting service");
 
+            client = new Client();
             client.RunContinuously();
         }
 
@@ -28,7 +28,9 @@ namespace DynDnsClient.Service
         {
             Log.Info("Stopping service");
 
-            client.Stop();
+            client.Dispose();
+            
+            Settings.Default.Save();
         }
     }
 }
