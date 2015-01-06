@@ -21,9 +21,12 @@ namespace DynDnsClient
         internal Hosts()
         {
             filePath = FilePath;
-            
-            hostsWatcher = new FileSystemWatcher(filePath);
-            hostsWatcher.Changed += OnChanged;
+
+            if (File.Exists(filePath))
+            {
+                hostsWatcher = new FileSystemWatcher(filePath);
+                hostsWatcher.Changed += OnChanged;   
+            }
         }
 
         internal event EventHandler Changed
