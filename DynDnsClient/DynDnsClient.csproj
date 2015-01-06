@@ -48,6 +48,7 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Client.cs" />
+    <Compile Include="Directories.cs" />
     <Compile Include="DnsUpdateResult.cs" />
     <Compile Include="ExternalIpAddress.cs" />
     <Compile Include="Hosts.cs" />

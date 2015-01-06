@@ -12,7 +12,6 @@ namespace DynDnsClient
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
-        private readonly string filePath; 
         private readonly FileSystemWatcher hostsWatcher;
 
         private EventHandler changedHandler;
@@ -20,13 +19,11 @@ namespace DynDnsClient
 
         internal Hosts()
         {
-            filePath = FilePath;
-
-            if (File.Exists(filePath))
-            {
-                hostsWatcher = new FileSystemWatcher(filePath);
-                hostsWatcher.Changed += OnChanged;   
-            }
+            hostsWatcher = new FileSystemWatcher(FilePath, FileName);
+            hostsWatcher.Created += (sender, e) => FireChanged();
+            hostsWatcher.Deleted += (sender, e) => FireChanged();
+            hostsWatcher.Changed += (sender, e) => FireChanged();
+            hostsWatcher.Renamed += (sender, e) => FireChanged();
         }
 
         internal event EventHandler Changed
@@ -41,7 +38,7 @@ namespace DynDnsClient
 
             if (hosts.Length == 0)
             {
-                Log.WarnFormat("Either file '{0}' wasn't found or no hosts exists in the file.", filePath);
+                Log.WarnFormat("Either file '{0}' wasn't found or no hosts exists in the file.", FilePath);
             }
             else
             {
@@ -58,21 +55,21 @@ namespace DynDnsClient
                 .ToArray();
         }
 
-        private string[] InternalRead()
+        private static string[] InternalRead()
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(FilePath))
             {
                 return new string[0];
             }
 
-            return File.ReadAllLines(filePath)
+            return File.ReadAllLines(FilePath)
                 .Select(host => host.Trim())
                 .Where(host => !string.IsNullOrWhiteSpace(host))
                 .Where(host => !host.StartsWith("#"))
                 .ToArray();
         }
 
-        private void OnChanged(object sender, FileSystemEventArgs e)
+        private void FireChanged()
         {
             EventHandler handler = changedHandler;
 
@@ -84,11 +81,7 @@ namespace DynDnsClient
 
         private static string FilePath
         {
-            get
-            {
-                string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                return Path.Combine(directory, FileName);    
-            }
+            get { return Path.Combine(Directories.CurrentDirectory, FileName); }
         }
 
         #region IDisposable Members

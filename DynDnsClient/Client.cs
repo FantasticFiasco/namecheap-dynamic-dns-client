@@ -24,14 +24,14 @@ namespace DynDnsClient
             namecheapClient = new NamecheapClient();
             
             hosts = new Hosts();
-            hosts.Changed += OnHostsChangeUpdate;
+            hosts.Changed += UpdateDueToChangedHosts;
         }
 
         public void RunContinuously()
         {
             Log.Info("Running client continuously");
             
-            timer = new Timer(OnPeriodicUpdate, null, TimeSpan.Zero, Settings.Default.Period);
+            timer = new Timer(UpdateDueToTimeout, null, TimeSpan.Zero, Settings.Default.Period);
         }
 
         public void RunOnce()
@@ -42,23 +42,28 @@ namespace DynDnsClient
             string lastKnownExternalIpAddress = Settings.Default.LastKnownExternalIpAddress;
             Settings.Default.LastKnownExternalIpAddress = null;
 
-            OnPeriodicUpdate(null);
+            UpdateDueToTimeout(null);
 
             // Restore last known IP address
             Settings.Default.LastKnownExternalIpAddress = lastKnownExternalIpAddress;
         }
 
-        private void OnHostsChangeUpdate(object sender, EventArgs e)
+        private void UpdateDueToChangedHosts(object sender, EventArgs e)
         {
             string[] addedHosts = hosts.AddedSinceLastRead();
             
             if (addedHosts.Any())
             {
+                Log.InfoFormat("Hosts file changed, {0} hosts where added.", addedHosts.Length);
                 Update(addedHosts);
+            }
+            else
+            {
+                Log.Info("Hosts file changed, no hosts where added.");
             }
         }
 
-        private void OnPeriodicUpdate(object state)
+        private void UpdateDueToTimeout(object state)
         {
             // Get external IP
             string ipAddress = externalIpAddress.Get();
