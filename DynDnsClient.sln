@@ -27,6 +27,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{20
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsService", "WindowsService", "{2CBF289B-8230-48F7-8601-710736F3AD6C}"
+	ProjectSection(SolutionItems) = preProject
+		WindowsService\InstallService.bat = WindowsService\InstallService.bat
+		WindowsService\StartService.bat = WindowsService\StartService.bat
+		WindowsService\StopService.bat = WindowsService\StopService.bat
+		WindowsService\UninstallService.bat = WindowsService\UninstallService.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

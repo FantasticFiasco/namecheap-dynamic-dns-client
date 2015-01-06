@@ -2,7 +2,7 @@
     
     <ItemGroup>
         <Solution Include="DynDnsClient.sln" />
-        <SetupBinDirectory Include="Setup\bin" />
+        <BinDirectory Include="bin" />
     </ItemGroup>
     
     <ItemGroup>
@@ -18,16 +18,18 @@
         <File Include="DynDnsClient.Service\bin\Release\DynDnsClient.Service.exe.config" />
         <!-- Thirdparty -->
         <File Include="DynDnsClient\bin\Release\log4net.dll" />
-        <!-- Setup files -->
-        <File Include="Setup\InstallService.bat" />
-        <File Include="Setup\UninstallService.bat" />
-        <File Include="Setup\InstallUtil.exe" />
-        <File Include="Setup\InstallUtil.exe.config" />
+        <!-- Windows Service -->
+        <File Include="WindowsService\InstallService.bat" />
+        <File Include="WindowsService\UninstallService.bat" />
+        <File Include="WindowsService\StopService.bat" />
+        <File Include="WindowsService\StartService.bat" />
+        <File Include="WindowsService\InstallUtil.exe" />
+        <File Include="WindowsService\InstallUtil.exe.config" />
     </ItemGroup>
     
     <Target Name="BuildSetup">
         <MSBuild Projects="@(Solution)" Targets="Clean;Rebuild" Properties="Configuration=Release;Platform=Any CPU" />
-        <Copy SourceFiles="@(File)" DestinationFolder="@(SetupBinDirectory)" />
+        <Copy SourceFiles="@(File)" DestinationFolder="@(BinDirectory)" />
     </Target>
 
 </Project>
