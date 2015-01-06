@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using log4net;
 
 namespace DynDnsClient.Console
@@ -11,11 +12,18 @@ namespace DynDnsClient.Console
         {
             Log.Info("Updating Namecheap host records...");
 
-            using (var client = new Client())
+            try
             {
-                client.RunOnce();    
+                using (var client = new Client())
+                {
+                    client.RunOnce();
+                }
             }
-
+            catch (Exception e)
+            {
+                Log.Fatal("Unable to run client.", e);
+            }
+            
             Log.Info("Press any key to continue...");
             System.Console.ReadKey();
         }

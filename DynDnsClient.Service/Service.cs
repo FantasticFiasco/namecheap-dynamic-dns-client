@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.ServiceProcess;
 using DynDnsClient.Properties;
 using log4net;
@@ -18,6 +19,8 @@ namespace DynDnsClient.Service
 
         protected override void OnStart(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
             Log.Info("Starting service");
 
             client = new Client();
@@ -31,6 +34,11 @@ namespace DynDnsClient.Service
             client.Dispose();
             
             Settings.Default.Save();
+        }
+
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.Fatal("Unhandled exception when running the service.", (Exception)e.ExceptionObject);
         }
     }
 }
