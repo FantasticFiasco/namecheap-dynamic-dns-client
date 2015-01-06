@@ -23,8 +23,16 @@ namespace DynDnsClient.Service
 
             Log.Info("Starting service");
 
-            client = new Client();
-            client.RunContinuously();
+            try
+            {
+                client = new Client();
+                client.RunContinuously();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Unable to run the client continuously.", e);
+                throw;
+            }
         }
 
         protected override void OnStop()
