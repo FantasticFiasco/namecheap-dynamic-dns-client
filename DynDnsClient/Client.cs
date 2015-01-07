@@ -54,12 +54,12 @@ namespace DynDnsClient
             
             if (addedHosts.Any())
             {
-                Log.InfoFormat("Hosts file changed, {0} hosts where added.", addedHosts.Length);
+                Log.InfoFormat("Hosts file changed, {0} hosts where added", addedHosts.Length);
                 Update(addedHosts);
             }
             else
             {
-                Log.Info("Hosts file changed, no hosts where added.");
+                Log.Info("Hosts file changed, no hosts where added");
             }
         }
 
@@ -69,14 +69,14 @@ namespace DynDnsClient
             string ipAddress = externalIpAddress.Get();
             if (ipAddress == null)
             {
-                Log.Error("Cannot proceed since external IP address is unknown.");
+                Log.Error("Cannot proceed since external IP address is unknown");
                 return;
             }
 
             // Determine if external IP has changed
             if (ipAddress == Settings.Default.LastKnownExternalIpAddress)
             {
-                Log.Info("External IP has not changed, is still " + ipAddress);
+                Log.InfoFormat("External IP has not changed, is still {0}", ipAddress);
                 return;
             }
 
@@ -101,11 +101,11 @@ namespace DynDnsClient
 
             if (result.IsSuccess)
             {
-                Log.Info("Successfully updated Namecheap records." + Environment.NewLine + result);
+                Log.InfoFormat("Successfully updated Namecheap records{0}{1}", Environment.NewLine, result);
             }
             else
             {
-                Log.Error("Unable to update Namecheap records" + Environment.NewLine + result);
+                Log.ErrorFormat("Unable to update Namecheap records{0}{1}", Environment.NewLine, result);
             }
 
             return result.IsSuccess;

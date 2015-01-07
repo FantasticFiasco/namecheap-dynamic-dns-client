@@ -30,7 +30,7 @@ namespace DynDnsClient.Service
             }
             catch (Exception e)
             {
-                Log.Error("Unable to run the client continuously.", e);
+                Log.Error("Unable to run the client continuously", e);
                 throw;
             }
         }
@@ -44,9 +44,9 @@ namespace DynDnsClient.Service
             Settings.Default.Save();
         }
 
-        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Log.Fatal("Unhandled exception when running the service.", (Exception)e.ExceptionObject);
+            Log.Fatal("Unhandled exception when running the service", (Exception)e.ExceptionObject);
         }
     }
 }

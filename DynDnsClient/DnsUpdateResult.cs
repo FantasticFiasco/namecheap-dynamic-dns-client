@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -20,13 +21,7 @@ namespace DynDnsClient
 
         public void Add(string host, bool success)
         {
-            var partialResult = new PartialResult
-            {
-                Host = host,
-                Success = success
-            };
-
-            partialResults.Add(partialResult);
+            partialResults.Add(new PartialResult(host, success));
         }
 
         public override string ToString()
@@ -35,7 +30,7 @@ namespace DynDnsClient
 
             foreach (PartialResult partialResult in partialResults.OrderBy(partialResult => partialResult.Success))
             {
-                resultBuilder.AppendFormat("Host: {0}; Success: {1}", partialResult.Host, partialResult.Success);
+                resultBuilder.AppendFormat("Host: {0}; Success: {1}{2}", partialResult.Host, partialResult.Success, Environment.NewLine);
             }
 
             return resultBuilder.ToString();
@@ -43,8 +38,24 @@ namespace DynDnsClient
 
         private class PartialResult
         {
-            public string Host { get; set; }
-            public bool Success { get; set; }
+            private readonly string host;
+            private readonly bool success;
+
+            internal PartialResult(string host, bool success)
+            {
+                this.host = host;
+                this.success = success;
+            }
+
+            public string Host
+            {
+                get { return host; }
+            }
+
+            public bool Success
+            {
+                get { return success; }
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace DynDnsClient.Console
             }
             catch (Exception e)
             {
-                Log.Fatal("Unable to run client.", e);
+                Log.Fatal("Unable to run client", e);
             }
             
             Log.Info("Press any key to continue...");

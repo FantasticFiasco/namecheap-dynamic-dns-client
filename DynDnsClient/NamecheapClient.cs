@@ -8,9 +8,10 @@ namespace DynDnsClient
 {
     internal class NamecheapClient
     {
+        private const string Url = "https://dynamicdns.park-your-domain.com/update?host={0}&domain={1}&password={2}";
+        
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly string Url = "https://dynamicdns.park-your-domain.com/update?host={0}&domain={1}&password={2}";
-
+        
         public DnsUpdateResult Update(string domain, IEnumerable<string> hosts, string password)
         {
             var result = new DnsUpdateResult();

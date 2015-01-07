@@ -6,9 +6,10 @@ namespace DynDnsClient
 {
     internal class ExternalIpAddress
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly string Url = "http://checkip.dyndns.com/";
+        private const string Url = "http://checkip.dyndns.com/";
 
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
         internal string Get()
         {
             using (var webClient = new WebClient())
@@ -19,7 +20,7 @@ namespace DynDnsClient
                 }
                 catch (WebException e)
                 {
-                    Log.Error("Unable to get external IP.", e);
+                    Log.Error("Unable to get external IP", e);
                     return null;
                 }
             }
