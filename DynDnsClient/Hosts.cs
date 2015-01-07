@@ -19,7 +19,7 @@ namespace DynDnsClient
 
         internal Hosts()
         {
-            hostsWatcher = new FileSystemWatcher(FilePath, FileName);
+            hostsWatcher = new FileSystemWatcher(Directories.CurrentDirectory, FileName);
             hostsWatcher.Created += (sender, e) => FireChanged();
             hostsWatcher.Deleted += (sender, e) => FireChanged();
             hostsWatcher.Changed += (sender, e) => FireChanged();
@@ -38,13 +38,9 @@ namespace DynDnsClient
 
             if (hosts.Length == 0)
             {
-                Log.WarnFormat("Either file '{0}' wasn't found or no hosts exists in the file.", FilePath);
+                Log.WarnFormat("Either file '{0}' wasn't found or no hosts exists in the file", FilePath);
             }
-            else
-            {
-                Log.InfoFormat("Hosts: {0}", string.Join(", ", hosts));    
-            }
-
+            
             return hosts;
         }
 
