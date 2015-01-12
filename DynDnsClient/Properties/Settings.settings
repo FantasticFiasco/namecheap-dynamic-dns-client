@@ -5,9 +5,6 @@
     <Setting Name="Period" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:15:00</Value>
     </Setting>
-    <Setting Name="LastKnownExternalIpAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="Domain" Type="System.String" Scope="Application">
       <Value Profile="(Default)">fantasticfiasco.com</Value>
     </Setting>

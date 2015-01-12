@@ -11,15 +11,17 @@ namespace DynDnsClient
     public class Client : IDisposable
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
+
+        private readonly SavedData savedData;
         private readonly ExternalIpAddress externalIpAddress;
         private readonly NamecheapClient namecheapClient;
         private readonly Hosts hosts;
 
         private Timer timer;
 
-        public Client()
+        public Client(SavedData savedData)
         {
+            this.savedData = savedData;
             externalIpAddress = new ExternalIpAddress();
             namecheapClient = new NamecheapClient();
             
@@ -27,35 +29,27 @@ namespace DynDnsClient
             hosts.Changed += UpdateDueToChangedHosts;
         }
 
-        public void RunContinuously()
+        public void Run()
         {
-            Log.Info("Running client continuously");
+            Log.Info("Running client");
             
             timer = new Timer(UpdateDueToTimeout, null, TimeSpan.Zero, Settings.Default.Period);
         }
 
-        public void RunOnce()
-        {
-            Log.Info("Running client once");
-
-            // Force update by specifying that last known IP address is unknown
-            string lastKnownExternalIpAddress = Settings.Default.LastKnownExternalIpAddress;
-            Settings.Default.LastKnownExternalIpAddress = null;
-
-            UpdateDueToTimeout(null);
-
-            // Restore last known IP address
-            Settings.Default.LastKnownExternalIpAddress = lastKnownExternalIpAddress;
-        }
-
         private void UpdateDueToChangedHosts(object sender, EventArgs e)
         {
-            string[] addedHosts = hosts.AddedSinceLastRead();
+            string[] addedHosts = hosts.Read()
+                .Except(savedData.Hosts)
+                .ToArray();
             
             if (addedHosts.Any())
             {
                 Log.InfoFormat("Hosts file changed, {0} hosts where added", addedHosts.Length);
-                Update(addedHosts);
+
+                if (Update(addedHosts))
+                {
+                    savedData.Hosts.AddRange(addedHosts);
+                }
             }
             else
             {
@@ -74,7 +68,7 @@ namespace DynDnsClient
             }
 
             // Determine if external IP has changed
-            if (ipAddress == Settings.Default.LastKnownExternalIpAddress)
+            if (ipAddress == savedData.LastKnownExternalIpAddress)
             {
                 Log.InfoFormat("External IP has not changed, is still {0}", ipAddress);
                 return;
@@ -82,12 +76,15 @@ namespace DynDnsClient
 
             Log.InfoFormat(
                 "External IP has changed from {0} to {1}, proceed with updating Namecheap records",
-                Settings.Default.LastKnownExternalIpAddress,
+                savedData.LastKnownExternalIpAddress,
                 ipAddress);
 
-            if (Update(hosts.Read()))
+            string[] existingHosts = hosts.Read();
+
+            if (Update(existingHosts))
             {
-                Settings.Default.LastKnownExternalIpAddress = ipAddress;
+                savedData.LastKnownExternalIpAddress = ipAddress;
+                savedData.Hosts = new List<string>(existingHosts);
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.ServiceProcess;
-using DynDnsClient.Properties;
 using log4net;
 
 namespace DynDnsClient.Service
@@ -10,6 +9,7 @@ namespace DynDnsClient.Service
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        private SavedData savedData;
         private Client client;
 
         public Service()
@@ -23,10 +23,12 @@ namespace DynDnsClient.Service
 
             Log.Info("Starting service");
 
+            savedData = SavedData.Load();
+
             try
             {
-                client = new Client();
-                client.RunContinuously();
+                client = new Client(savedData);
+                client.Run();
             }
             catch (Exception e)
             {
@@ -41,7 +43,7 @@ namespace DynDnsClient.Service
 
             client.Dispose();
             
-            Settings.Default.Save();
+            SavedData.Save(savedData);
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
