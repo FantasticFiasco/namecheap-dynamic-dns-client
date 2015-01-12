@@ -10,9 +10,6 @@
         <File Include="DynDnsClient\bin\Release\DynDnsClient.dll" />
         <File Include="DynDnsClient\bin\Release\DynDnsClient.dll.config" />
         <File Include="DynDnsClient\bin\Release\Hosts.txt" />
-        <!-- DynDnsClient.Console -->
-        <File Include="DynDnsClient.Console\bin\Release\DynDnsClient.Console.exe" />
-        <File Include="DynDnsClient.Console\bin\Release\DynDnsClient.Console.exe.config" />
         <!-- DynDnsClient.Service -->
         <File Include="DynDnsClient.Service\bin\Release\DynDnsClient.Service.exe" />
         <File Include="DynDnsClient.Service\bin\Release\DynDnsClient.Service.exe.config" />
