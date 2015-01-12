@@ -26,18 +26,17 @@ namespace DynDnsClient
 
         public override string ToString()
         {
-            var resultBuilder = new StringBuilder();
+            var results = new List<string>();
 
             foreach (PartialResult partialResult in partialResults.OrderBy(partialResult => partialResult.Success))
             {
-                resultBuilder.AppendFormat(
-                    "{0}: {1}{2}",
+                results.Add(string.Format(
+                    "{0}: {1}",
                     partialResult.Host,
-                    partialResult.Success ? "Success" : "Failure",
-                    Environment.NewLine);
+                    partialResult.Success ? "Success" : "Failure"));
             }
 
-            return resultBuilder.ToString();
+            return string.Join(Environment.NewLine, results);
         }
 
         private class PartialResult
