@@ -30,7 +30,11 @@ namespace DynDnsClient
 
             foreach (PartialResult partialResult in partialResults.OrderBy(partialResult => partialResult.Success))
             {
-                resultBuilder.AppendFormat("Host: {0}; Success: {1}{2}", partialResult.Host, partialResult.Success, Environment.NewLine);
+                resultBuilder.AppendFormat(
+                    "{0}: {1}{2}",
+                    partialResult.Host,
+                    partialResult.Success ? "Success" : "Failure",
+                    Environment.NewLine);
             }
 
             return resultBuilder.ToString();
