@@ -13,7 +13,7 @@ namespace DynDnsClient
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly SavedData savedData;
-        private readonly ExternalIpAddress externalIpAddress;
+        private readonly WanAddressResolver wanAddressResolver;
         private readonly NamecheapClient namecheapClient;
         private readonly Hosts hosts;
 
@@ -22,7 +22,7 @@ namespace DynDnsClient
         public Client(SavedData savedData)
         {
             this.savedData = savedData;
-            externalIpAddress = new ExternalIpAddress();
+            wanAddressResolver = new WanAddressResolver();
             namecheapClient = new NamecheapClient();
             
             hosts = new Hosts();
@@ -59,31 +59,31 @@ namespace DynDnsClient
 
         private void UpdateDueToTimeout(object state)
         {
-            // Get external IP
-            string ipAddress = externalIpAddress.Get();
-            if (ipAddress == null)
+            // Resolve WAN address
+            string address = wanAddressResolver.Resolve();
+            if (address == null)
             {
-                Log.Error("Cannot proceed since external IP address is unknown");
+                Log.Error("Cannot proceed since WAN address is unknown");
                 return;
             }
 
-            // Determine if external IP has changed
-            if (ipAddress == savedData.LastKnownExternalIpAddress)
+            // Determine if WAN address has changed
+            if (address == savedData.LastKnownWanAddress)
             {
-                Log.InfoFormat("External IP has not changed, is still {0}", ipAddress);
+                Log.InfoFormat("WAN address has not changed, is still {0}", address);
                 return;
             }
 
             Log.InfoFormat(
-                "External IP has changed from {0} to {1}, proceed with updating Namecheap records",
-                savedData.LastKnownExternalIpAddress,
-                ipAddress);
+                "WAN address has changed from {0} to {1}, proceed with updating Namecheap records",
+                savedData.LastKnownWanAddress,
+                address);
 
             string[] existingHosts = hosts.Read();
 
             if (Update(existingHosts))
             {
-                savedData.LastKnownExternalIpAddress = ipAddress;
+                savedData.LastKnownWanAddress = address;
                 savedData.Hosts = new List<string>(existingHosts);
             }
         }

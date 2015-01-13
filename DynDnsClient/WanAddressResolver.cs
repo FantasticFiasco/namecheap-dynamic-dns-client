@@ -4,13 +4,13 @@ using log4net;
 
 namespace DynDnsClient
 {
-    internal class ExternalIpAddress
+    internal class WanAddressResolver
     {
         private const string Url = "http://checkip.dyndns.com/";
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
-        internal string Get()
+        internal string Resolve()
         {
             using (var webClient = new WebClient())
             {
@@ -20,7 +20,7 @@ namespace DynDnsClient
                 }
                 catch (WebException e)
                 {
-                    Log.Error("Unable to get external IP", e);
+                    Log.Error("Unable to get WAN address", e);
                     return null;
                 }
             }

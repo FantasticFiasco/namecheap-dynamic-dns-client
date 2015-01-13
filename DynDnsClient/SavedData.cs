@@ -13,7 +13,7 @@ namespace DynDnsClient
             Hosts = new List<string>();
         }
 
-        public string LastKnownExternalIpAddress { get; set; }
+        public string LastKnownWanAddress { get; set; }
 
         public List<string> Hosts { get; set; }
 
