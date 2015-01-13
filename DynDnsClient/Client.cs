@@ -14,7 +14,7 @@ namespace DynDnsClient
 
         private readonly SavedData savedData;
         private readonly WanAddressResolver wanAddressResolver;
-        private readonly NamecheapClient namecheapClient;
+        private readonly DnsUpdater dnsUpdater;
         private readonly Hosts hosts;
 
         private Timer timer;
@@ -23,7 +23,7 @@ namespace DynDnsClient
         {
             this.savedData = savedData;
             wanAddressResolver = new WanAddressResolver();
-            namecheapClient = new NamecheapClient();
+            dnsUpdater = new DnsUpdater();
             
             hosts = new Hosts();
             hosts.Changed += UpdateDueToChangedHosts;
@@ -91,7 +91,7 @@ namespace DynDnsClient
         private bool Update(IEnumerable<string> hosts)
         {
             // Update Namecheap records
-            DnsUpdateResult result = namecheapClient.Update(
+            DnsUpdateResult result = dnsUpdater.Update(
                 Settings.Default.Domain,
                 hosts,
                 Settings.Default.Password);

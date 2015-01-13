@@ -6,7 +6,7 @@ using log4net;
 
 namespace DynDnsClient
 {
-    internal class NamecheapClient
+    internal class DnsUpdater
     {
         private const string Url = "https://dynamicdns.park-your-domain.com/update?host={0}&domain={1}&password={2}";
         
